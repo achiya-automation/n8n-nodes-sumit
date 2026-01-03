@@ -1,0 +1,64 @@
+{
+  "name": "n8n-nodes-sumit",
+  "version": "2.2.0",
+  "description": "n8n node for Sumit Accounting API integration",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "sumit",
+    "accounting",
+    "invoice",
+    "tax-invoice",
+    "israel",
+    "hebrew",
+    "חשבונאות",
+    "חשבונית",
+    "automation",
+    "workflow",
+    "integration"
+  ],
+  "license": "MIT",
+  "homepage": "https://www.npmjs.com/package/n8n-nodes-sumit",
+  "author": {
+    "name": "Achiya",
+    "email": "achiya@achiya-automation.com"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "format": "prettier nodes --write",
+    "lint": "eslint nodes package.json",
+    "lintfix": "eslint nodes package.json --fix",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist",
+    "LICENSE.md",
+    "README.md",
+    "README_HE.md"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/SumitApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Sumit/Sumit.node.js",
+      "dist/nodes/SumitTrigger/SumitTrigger.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^5.59.0",
+    "eslint": "^8.40.0",
+    "eslint-plugin-n8n-nodes-base": "^1.12.0",
+    "gulp": "^4.0.2",
+    "n8n-workflow": "^1.0.0",
+    "prettier": "^2.8.8",
+    "typescript": "^5.0.4"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  },
+  "dependencies": {}
+}
