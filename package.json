@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-sumit",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "n8n node for Sumit Accounting API integration",
   "keywords": [
     "n8n-community-node-package",
@@ -28,7 +28,7 @@
   },
   "author": {
     "name": "Achiya",
-    "email": "achiya@achiya-automation.com"
+    "email": "a.c0504197060@gmail.com"
   },
   "main": "index.js",
   "scripts": {
