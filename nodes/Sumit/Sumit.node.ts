@@ -4,8 +4,10 @@ import {
 	INodeType,
 	INodeTypeDescription,
 	IDataObject,
-	NodeOperationError,
+	NodeApiError,
+	NodeConnectionTypes,
 	IHttpRequestMethods,
+	JsonObject,
 } from 'n8n-workflow';
 
 export class Sumit implements INodeType {
@@ -20,8 +22,8 @@ export class Sumit implements INodeType {
 		defaults: {
 			name: 'Sumit',
 		},
-		inputs: ['main'],
-		outputs: ['main'],
+		inputs: [NodeConnectionTypes.Main],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'sumitApi',
@@ -43,8 +45,28 @@ export class Sumit implements INodeType {
 				noDataExpression: true,
 				options: [
 					{
+						name: 'Company',
+						value: 'company',
+					},
+					{
+						name: 'CRM Data',
+						value: 'crmData',
+					},
+					{
+						name: 'CRM Schema',
+						value: 'crmSchema',
+					},
+					{
+						name: 'CRM Views',
+						value: 'crmViews',
+					},
+					{
 						name: 'Customer',
 						value: 'customer',
+					},
+					{
+						name: 'Customer Service',
+						value: 'customerService',
 					},
 					{
 						name: 'Document',
@@ -69,26 +91,6 @@ export class Sumit implements INodeType {
 					{
 						name: 'Stock',
 						value: 'stock',
-					},
-					{
-						name: 'CRM Data',
-						value: 'crmData',
-					},
-					{
-						name: 'CRM Schema',
-						value: 'crmSchema',
-					},
-					{
-						name: 'CRM Views',
-						value: 'crmViews',
-					},
-					{
-						name: 'Company',
-						value: 'company',
-					},
-					{
-						name: 'Customer Service',
-						value: 'customerService',
 					},
 					{
 						name: 'Website Permissions',
@@ -123,10 +125,10 @@ export class Sumit implements INodeType {
 						action: 'Create a customer',
 					},
 					{
-						name: 'Update',
-						value: 'update',
-						description: 'Update an existing customer',
-						action: 'Update a customer',
+						name: 'Create Remark',
+						value: 'createRemark',
+						description: 'Add a remark to a customer',
+						action: 'Create a customer remark',
 					},
 					{
 						name: 'Get Details URL',
@@ -135,10 +137,10 @@ export class Sumit implements INodeType {
 						action: 'Get customer details URL',
 					},
 					{
-						name: 'Create Remark',
-						value: 'createRemark',
-						description: 'Add a remark to a customer',
-						action: 'Create a customer remark',
+						name: 'Update',
+						value: 'update',
+						description: 'Update an existing customer',
+						action: 'Update a customer',
 					},
 				],
 				default: 'create',
@@ -311,30 +313,6 @@ export class Sumit implements INodeType {
 				},
 				options: [
 					{
-						name: 'Create',
-						value: 'create',
-						description: 'Create a new document (Invoice/Receipt/etc.)',
-						action: 'Create a document',
-					},
-					{
-						name: 'Send',
-						value: 'send',
-						description: 'Send document by email',
-						action: 'Send a document',
-					},
-					{
-						name: 'Get PDF',
-						value: 'getPdf',
-						description: 'Get document as PDF',
-						action: 'Get document PDF',
-					},
-					{
-						name: 'Get Details',
-						value: 'getDetails',
-						description: 'Get document details',
-						action: 'Get document details',
-					},
-					{
 						name: 'Add Expense',
 						value: 'addExpense',
 						description: 'Add an expense document',
@@ -347,10 +325,10 @@ export class Sumit implements INodeType {
 						action: 'Cancel a document',
 					},
 					{
-						name: 'Move to Books',
-						value: 'moveToBooks',
-						description: 'Move draft document to books',
-						action: 'Move document to books',
+						name: 'Create',
+						value: 'create',
+						description: 'Create a new document (Invoice/Receipt/etc.)',
+						action: 'Create a document',
 					},
 					{
 						name: 'Get Debt',
@@ -365,10 +343,34 @@ export class Sumit implements INodeType {
 						action: 'Get debt report',
 					},
 					{
+						name: 'Get Details',
+						value: 'getDetails',
+						description: 'Get document details',
+						action: 'Get document details',
+					},
+					{
+						name: 'Get PDF',
+						value: 'getPdf',
+						description: 'Get document as PDF',
+						action: 'Get document PDF',
+					},
+					{
 						name: 'List',
 						value: 'list',
 						description: 'List documents',
 						action: 'List documents',
+					},
+					{
+						name: 'Move to Books',
+						value: 'moveToBooks',
+						description: 'Move draft document to books',
+						action: 'Move document to books',
+					},
+					{
+						name: 'Send',
+						value: 'send',
+						description: 'Send document by email',
+						action: 'Send a document',
 					},
 				],
 				default: 'create',
@@ -755,28 +757,10 @@ export class Sumit implements INodeType {
 				},
 				options: [
 					{
-						name: 'Verify Bank Account',
-						value: 'verifyBankAccount',
-						description: 'Verify Israeli bank account details',
-						action: 'Verify bank account',
-					},
-					{
-						name: 'Get VAT Rate',
-						value: 'getVatRate',
-						description: 'Get VAT rate for a specific date',
-						action: 'Get VAT rate',
-					},
-					{
 						name: 'Get Exchange Rate',
 						value: 'getExchangeRate',
 						description: 'Get currency exchange rate',
 						action: 'Get exchange rate',
-					},
-					{
-						name: 'Update Settings',
-						value: 'updateSettings',
-						description: 'Update company settings',
-						action: 'Update settings',
 					},
 					{
 						name: 'Get Next Document Number',
@@ -785,10 +769,28 @@ export class Sumit implements INodeType {
 						action: 'Get next document number',
 					},
 					{
+						name: 'Get VAT Rate',
+						value: 'getVatRate',
+						description: 'Get VAT rate for a specific date',
+						action: 'Get VAT rate',
+					},
+					{
 						name: 'Set Next Document Number',
 						value: 'setNextDocumentNumber',
 						description: 'Set next document number',
 						action: 'Set next document number',
+					},
+					{
+						name: 'Update Settings',
+						value: 'updateSettings',
+						description: 'Update company settings',
+						action: 'Update settings',
+					},
+					{
+						name: 'Verify Bank Account',
+						value: 'verifyBankAccount',
+						description: 'Verify Israeli bank account details',
+						action: 'Verify bank account',
 					},
 				],
 				default: 'getVatRate',
@@ -1001,6 +1003,12 @@ export class Sumit implements INodeType {
 				},
 				options: [
 					{
+						name: 'Begin Redirect',
+						value: 'beginRedirect',
+						description: 'Create payment page redirect',
+						action: 'Begin payment redirect',
+					},
+					{
 						name: 'Charge Customer',
 						value: 'charge',
 						description: 'Charge a customer',
@@ -1017,12 +1025,6 @@ export class Sumit implements INodeType {
 						value: 'list',
 						description: 'List payments',
 						action: 'List payments',
-					},
-					{
-						name: 'Begin Redirect',
-						value: 'beginRedirect',
-						description: 'Create payment page redirect',
-						action: 'Begin payment redirect',
 					},
 				],
 				default: 'charge',
@@ -1065,16 +1067,16 @@ export class Sumit implements INodeType {
 						action: 'Get payment methods',
 					},
 					{
-						name: 'Set for Customer',
-						value: 'setForCustomer',
-						description: 'Store payment method for customer',
-						action: 'Set payment method',
-					},
-					{
 						name: 'Remove',
 						value: 'remove',
 						description: 'Remove stored payment method',
 						action: 'Remove payment method',
+					},
+					{
+						name: 'Set for Customer',
+						value: 'setForCustomer',
+						description: 'Store payment method for customer',
+						action: 'Set payment method',
 					},
 				],
 				default: 'getForCustomer',
@@ -1134,16 +1136,22 @@ export class Sumit implements INodeType {
 				},
 				options: [
 					{
+						name: 'Archive Entity',
+						value: 'archiveEntity',
+						description: 'Archive an entity',
+						action: 'Archive entity',
+					},
+					{
 						name: 'Create Entity',
 						value: 'createEntity',
 						description: 'Create a new CRM entity',
 						action: 'Create entity',
 					},
 					{
-						name: 'Update Entity',
-						value: 'updateEntity',
-						description: 'Update a CRM entity',
-						action: 'Update entity',
+						name: 'Delete Entity',
+						value: 'deleteEntity',
+						description: 'Delete an entity',
+						action: 'Delete entity',
 					},
 					{
 						name: 'Get Entity',
@@ -1158,16 +1166,10 @@ export class Sumit implements INodeType {
 						action: 'List entities',
 					},
 					{
-						name: 'Archive Entity',
-						value: 'archiveEntity',
-						description: 'Archive an entity',
-						action: 'Archive entity',
-					},
-					{
-						name: 'Delete Entity',
-						value: 'deleteEntity',
-						description: 'Delete an entity',
-						action: 'Delete entity',
+						name: 'Update Entity',
+						value: 'updateEntity',
+						description: 'Update a CRM entity',
+						action: 'Update entity',
 					},
 				],
 				default: 'listEntities',
@@ -1377,16 +1379,16 @@ export class Sumit implements INodeType {
 				},
 				options: [
 					{
-						name: 'Set Permission',
-						value: 'setPermission',
-						description: 'Grant user permission',
-						action: 'Set permission',
-					},
-					{
 						name: 'Remove Permission',
 						value: 'removePermission',
 						description: 'Remove user permission',
 						action: 'Remove permission',
+					},
+					{
+						name: 'Set Permission',
+						value: 'setPermission',
+						description: 'Grant user permission',
+						action: 'Set permission',
 					},
 				],
 				default: 'setPermission',
@@ -2066,7 +2068,7 @@ export class Sumit implements INodeType {
 				}
 
 				// Make the API request
-				const response = await this.helpers.httpRequest({
+				const response = await this.helpers.httpRequestWithAuthentication.call(this, 'sumitApi', {
 					method,
 					url: `${baseUrl}${endpoint}`,
 					body,
@@ -2083,7 +2085,7 @@ export class Sumit implements INodeType {
 					returnData.push({ error: errorMessage });
 					continue;
 				}
-				throw new NodeOperationError(this.getNode(), error as Error, {
+				throw new NodeApiError(this.getNode(), error as JsonObject, {
 					itemIndex: i,
 				});
 			}

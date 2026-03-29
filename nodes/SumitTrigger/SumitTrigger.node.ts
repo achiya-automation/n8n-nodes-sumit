@@ -5,6 +5,7 @@ import {
 	INodeTypeDescription,
 	IWebhookResponseData,
 	IDataObject,
+	NodeConnectionTypes,
 	NodeOperationError,
 } from 'n8n-workflow';
 
@@ -21,7 +22,7 @@ export class SumitTrigger implements INodeType {
 			name: 'Sumit Trigger',
 		},
 		inputs: [],
-		outputs: ['main'],
+		outputs: [NodeConnectionTypes.Main],
 		credentials: [
 			{
 				name: 'sumitApi',
@@ -155,7 +156,7 @@ export class SumitTrigger implements INodeType {
 				}
 
 				try {
-					const response = await this.helpers.request({
+					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'sumitApi', {
 						method: 'POST',
 						url: `${baseUrl}triggers/triggers/subscribe/`,
 						body,
@@ -192,7 +193,7 @@ export class SumitTrigger implements INodeType {
 				};
 
 				try {
-					const response = await this.helpers.request({
+					const response = await this.helpers.httpRequestWithAuthentication.call(this, 'sumitApi', {
 						method: 'POST',
 						url: `${baseUrl}triggers/triggers/unsubscribe/`,
 						body,

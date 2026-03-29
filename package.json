@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-sumit",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "n8n node for Sumit Accounting API integration",
   "keywords": [
     "n8n-community-node-package",
@@ -18,7 +18,14 @@
     "integration"
   ],
   "license": "MIT",
-  "homepage": "https://www.npmjs.com/package/n8n-nodes-sumit",
+  "homepage": "https://github.com/achiya-automation/n8n-nodes-sumit#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/achiya-automation/n8n-nodes-sumit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/achiya-automation/n8n-nodes-sumit/issues"
+  },
   "author": {
     "name": "Achiya",
     "email": "achiya@achiya-automation.com"

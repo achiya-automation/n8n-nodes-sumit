@@ -8,6 +8,7 @@ import {
 export class SumitApi implements ICredentialType {
 	name = 'sumitApi';
 	displayName = 'Sumit API';
+	icon = 'file:sumit.png' as const;
 	documentationUrl = 'https://api.sumit.co.il/';
 	properties: INodeProperties[] = [
 		{
