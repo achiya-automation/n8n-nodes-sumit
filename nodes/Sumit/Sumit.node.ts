@@ -17,7 +17,7 @@ export class Sumit implements INodeType {
 		icon: 'file:sumit.png',
 		group: ['transform'],
 		version: 1,
-		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
+		subtitle: '={{$parameter["resource"] + ": " + $parameter["operation"]}}',
 		description: 'Interact with Sumit Accounting API',
 		defaults: {
 			name: 'Sumit',
@@ -30,12 +30,6 @@ export class Sumit implements INodeType {
 				required: true,
 			},
 		],
-		requestDefaults: {
-			baseURL: '={{$credentials.baseUrl}}',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		},
 		properties: [
 			// Resource Selection
 			{
@@ -93,11 +87,11 @@ export class Sumit implements INodeType {
 						value: 'stock',
 					},
 					{
-						name: 'Website Permissions',
+						name: 'Website Permission',
 						value: 'websitePermissions',
 					},
 					{
-						name: 'Website Users',
+						name: 'Website User',
 						value: 'websiteUsers',
 					},
 				],
@@ -389,95 +383,95 @@ export class Sumit implements INodeType {
 				},
 				options: [
 					{
-						name: 'Invoice (חשבונית)',
+						name: 'Invoice',
 						value: 0,
 					},
 					{
-						name: 'Invoice and Receipt (חשבונית מס קבלה)',
+						name: 'Invoice and Receipt',
 						value: 1,
 					},
 					{
-						name: 'Receipt (קבלה)',
+						name: 'Receipt',
 						value: 2,
 					},
 					{
-						name: 'Proforma Invoice (חשבונית עסקה)',
+						name: 'Proforma Invoice',
 						value: 3,
 					},
 					{
-						name: 'Donation Receipt (קבלה לתרומה)',
+						name: 'Donation Receipt',
 						value: 4,
 					},
 					{
-						name: 'Credit Invoice (חשבונית זיכוי)',
+						name: 'Credit Invoice',
 						value: 5,
 					},
 					{
-						name: 'Credit Invoice and Receipt (חשבונית זיכוי וקבלה)',
+						name: 'Credit Invoice and Receipt',
 						value: 6,
 					},
 					{
-						name: 'Credit Receipt (קבלת זיכוי)',
+						name: 'Credit Receipt',
 						value: 7,
 					},
 					{
-						name: 'Order (הזמנה)',
+						name: 'Order',
 						value: 8,
 					},
 					{
-						name: 'Delivery Note (תעודת משלוח)',
+						name: 'Delivery Note',
 						value: 9,
 					},
 					{
-						name: 'Goods Return Note (תעודת החזרה)',
+						name: 'Goods Return Note',
 						value: 10,
 					},
 					{
-						name: 'Purchasing Order (הזמנת רכש)',
+						name: 'Purchasing Order',
 						value: 11,
 					},
 					{
-						name: 'Price Quotation (הצעת מחיר)',
+						name: 'Price Quotation',
 						value: 12,
 					},
 					{
-						name: 'Payment Request (בקשת תשלום)',
+						name: 'Payment Request',
 						value: 13,
 					},
 					{
-						name: 'Credit Donation Receipt (קבלת זיכוי לתרומה)',
+						name: 'Credit Donation Receipt',
 						value: 14,
 					},
 					{
-						name: 'Expense Invoice Receipt (חשבונית/קבלה הוצאה)',
+						name: 'Expense Invoice Receipt',
 						value: 15,
 					},
 					{
-						name: 'Expense Invoice (חשבונית הוצאה)',
+						name: 'Expense Invoice',
 						value: 16,
 					},
 					{
-						name: 'Expense Receipt (קבלת הוצאה)',
+						name: 'Expense Receipt',
 						value: 17,
 					},
 					{
-						name: 'Expense Request (בקשת הוצאה)',
+						name: 'Expense Request',
 						value: 18,
 					},
 					{
-						name: 'Credit Expense Invoice Receipt (זיכוי חשבונית/קבלה הוצאה)',
+						name: 'Credit Expense Invoice Receipt',
 						value: 19,
 					},
 					{
-						name: 'Credit Expense Invoice (זיכוי חשבונית הוצאה)',
+						name: 'Credit Expense Invoice',
 						value: 20,
 					},
 					{
-						name: 'Credit Expense Receipt (זיכוי קבלת הוצאה)',
+						name: 'Credit Expense Receipt',
 						value: 21,
 					},
 					{
-						name: 'Supplier Payment (תשלום לספק)',
+						name: 'Supplier Payment',
 						value: 22,
 					},
 				],
@@ -1633,7 +1627,7 @@ export class Sumit implements INodeType {
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
 		const items = this.getInputData();
-		const returnData: IDataObject[] = [];
+		const returnData: INodeExecutionData[] = [];
 		const credentials = await this.getCredentials('sumitApi');
 
 		const baseUrl = credentials.baseUrl as string;
@@ -2077,12 +2071,12 @@ export class Sumit implements INodeType {
 					},
 				});
 
-				returnData.push(response as IDataObject);
+				returnData.push({ json: response as IDataObject, pairedItem: { item: i } });
 
 			} catch (error) {
 				if (this.continueOnFail()) {
 					const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-					returnData.push({ error: errorMessage });
+					returnData.push({ json: { error: errorMessage }, pairedItem: { item: i } });
 					continue;
 				}
 				throw new NodeApiError(this.getNode(), error as JsonObject, {
@@ -2091,6 +2085,6 @@ export class Sumit implements INodeType {
 			}
 		}
 
-		return [this.helpers.returnJsonArray(returnData)];
+		return [returnData];
 	}
 }

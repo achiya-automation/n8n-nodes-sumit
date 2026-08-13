@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-sumit",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "n8n node for Sumit Accounting API integration",
   "keywords": [
     "n8n-community-node-package",

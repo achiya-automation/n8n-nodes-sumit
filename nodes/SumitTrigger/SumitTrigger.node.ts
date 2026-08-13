@@ -114,17 +114,11 @@ export class SumitTrigger implements INodeType {
 	webhookMethods = {
 		default: {
 			async checkExists(this: IHookFunctions): Promise<boolean> {
-				// Check if webhook already exists
+				// Sumit's API has no endpoint to list existing trigger subscriptions,
+				// so the registered webhook URL is tracked in workflow static data.
 				const webhookUrl = this.getNodeWebhookUrl('default');
-				const credentials = await this.getCredentials('sumitApi');
-
-				try {
-					// In a real implementation, you would check if the webhook is registered
-					// For now, we'll return false to always create a new one
-					return false;
-				} catch (error) {
-					return false;
-				}
+				const staticData = this.getWorkflowStaticData('node');
+				return staticData.webhookUrl === webhookUrl;
 			},
 			async create(this: IHookFunctions): Promise<boolean> {
 				const webhookUrl = this.getNodeWebhookUrl('default');
@@ -173,6 +167,10 @@ export class SumitTrigger implements INodeType {
 						);
 					}
 
+					// Remember the registered URL so checkExists() can skip duplicate subscriptions
+					const staticData = this.getWorkflowStaticData('node');
+					staticData.webhookUrl = webhookUrl;
+
 					return true;
 				} catch (error) {
 					throw new NodeOperationError(this.getNode(), error as Error);
@@ -207,6 +205,9 @@ export class SumitTrigger implements INodeType {
 						// Don't throw error on delete failure, just return false
 						return false;
 					}
+
+					const staticData = this.getWorkflowStaticData('node');
+					delete staticData.webhookUrl;
 
 					return true;
 				} catch (error) {

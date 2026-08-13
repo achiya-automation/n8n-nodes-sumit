@@ -15,7 +15,7 @@ export class SumitApi implements ICredentialType {
 			displayName: 'Company ID',
 			name: 'companyId',
 			type: 'number',
-			default: '',
+			default: 0,
 			required: true,
 			description: 'The Company ID from your Sumit account',
 		},
